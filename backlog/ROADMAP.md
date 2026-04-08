@@ -1,100 +1,101 @@
-# Konf Roadmap — What Needs Building Next
+# Konf Roadmap
 
-Prioritized by what the architect experiment will reveal. Items marked with **(blocked)** can't be done until a dependency is resolved.
-
----
-
-## Now: Validate What's Built
-
-Before building more, prove the current architecture works end-to-end.
-
-- [ ] Connect MCP client → konf-mcp → call system:introspect → see tools
-- [ ] Generate workflow YAML via AI → yaml:validate_workflow → deploy → execute
-- [ ] shell:exec works in sandbox container
-- [ ] config:reload picks up new workflows
-- [ ] Git checkpointing via shell:exec works
-- [ ] Capability escalation is actually blocked (test the permission proof)
+Driven by experiment findings, not speculation. Each item is something we're building toward — sequenced by what we learn.
 
 ---
 
-## Next: Gaps the Architect Will Expose
+## Experiment Track
 
-These are things we expect to need based on architecture analysis. The experiment will confirm which are real blockers vs theoretical.
+Each experiment proves one more layer. Findings feed back into Konf infra.
 
-### config:reload — Full Implementation
-**Priority:** Critical (first thing the architect will need)
-**Status:** Stub exists — reports file count but doesn't actually re-register workflows
-**What's needed:** Re-parse workflows dir, re-register as tools, ArcSwap the product config. The boot sequence in konf-init already does this — extract it into a reusable function.
+### Experiment 001: MCP E2E — connect and validate tools
+- [ ] Connect MCP client → konf-mcp → system:introspect → see tools
+- [ ] Generate workflow YAML → yaml:validate_workflow → deploy → execute
+- [ ] shell:exec in sandbox container
+- [ ] config:reload picks up new workflows (now fully implemented)
+- [ ] Git checkpointing via shell:exec
+- [ ] Capability escalation blocked (permission proof)
 
-### Conversation State / Multi-Turn
-**Priority:** High
-**Status:** Not implemented
-**What's needed:** The MCP connection is stateless per-call. For the architect to have a conversation (remember what it built earlier in the session), either:
-- The MCP client handles conversation state (Claude Code does this natively)
-- Or Konf needs session state for MCP connections
-**Likely finding:** Claude Code handles this. Other MCP clients might not.
+### Experiment 002: Cross-AI collaboration
+- [ ] Claude Code + Gemini CLI in same workspace
+- [ ] Shared context via files (experiment logs, docs, git)
+- [ ] Each AI audits the other's work
+- [ ] Findings: what communication patterns work?
 
-### File Watcher (notify crate)
-**Priority:** Medium
-**Status:** notify is a dependency but not wired
-**What's needed:** Watch config dir for changes, auto-reload. Alternative to manual config:reload calls. Less urgent if config:reload works well.
+### Experiment 003: Dev environment as a Konf product
+- [ ] konf-dev-stack workflow (repos, branches, sync, docs) as Konf config
+- [ ] Managing konf + smrti + unspool + autokore from one interface
+- [ ] The Oracle — single point of contact with the entire OS
 
-### Audit Journal for MCP Calls
-**Priority:** Medium
-**Status:** shell:exec logs to journal, but other MCP tool calls don't
-**What's needed:** All tool invocations via MCP should be logged to the event journal, not just shell:exec.
+### Experiment 004: Autonomous agent mode
+- [ ] ai:complete with inner tools runs without human
+- [ ] Scheduled workflows
+- [ ] Agent generates and deploys workflows on its own
 
----
-
-## Later: Architecture Expansion
-
-### SQLite Memory Backend
-**Why:** Proves backend-agnostic storage. Enables edge/air-gapped/mobile.
-**Blocked on:** Nothing — can build anytime
-**Validates:** MemoryBackend trait is a real abstraction, not leaky
-
-### WASM Tool Adapter
-**Why:** Proves open adapter architecture. Enables admin-installed plugins without recompilation.
-**Blocked on:** Nothing — can build anytime
-**Validates:** Tool trait is genuinely adapter-agnostic
-
-### Autonomous Agent Mode
-**Why:** Agent runs without human steering (for scheduled tasks, background processing)
-**Blocked on:** The ai:complete tool already has a ReAct loop via rig-core. Need to verify it works with the new tools (shell:exec, validate, introspect) as inner tools.
-**Validates:** Same tools work in both MCP (human-steered) and autonomous (agent-steered) modes
-
-### Network Access for Sandbox
-**Why:** Architect needs to test HTTP workflows it creates
-**Blocked on:** Sandbox currently runs with `--network none`
-**What's needed:** Docker network with egress filtering (allow specific domains only)
-
-### Capability Grants per MCP Session
-**Why:** Different MCP clients should get different capabilities (admin vs user)
-**Blocked on:** konf-mcp currently gives all tools to all clients
-**What's needed:** Auth + session-scoped capability grants for MCP connections
-
-### Product Packaging
-**Why:** Once the architect builds a product, how do you ship it? A product is a config directory — needs a standard packaging format.
-**What's needed:** Define what a "distributable product" looks like (tarball? git repo? OCI image with config?)
+### Experiment 005: Personal assistant rebuild
+- [ ] Unspool's functionality as pure Konf config
+- [ ] Memory, personality, scheduling, ADHD-specific features
 
 ---
 
-## Far Future: Vision Items
+## Infra Gaps
 
-These are architecturally sound but premature without users.
+### config:reload — DONE
+Fully implemented. Re-parses workflows dir, removes stale tools, re-registers. Engine::remove_tool() added.
 
-| Item | When to build |
-|------|--------------|
-| UniFFI mobile bindings (iOS/Android) | When a product needs to run on mobile |
-| P2P agent swarms (libp2p/WebRTC) | When multi-instance is needed |
-| Suspend/resume checkpointing | When a product has long-running workflows |
-| Dynamic capability elevation ("ask user for permission") | When a product needs it |
-| Firecracker/gVisor upgrade | When untrusted agents need sandboxing |
-| Formal API spec (OpenAPI) | When external developers need stable API contracts |
-| Admin console (Appsmith) | When operators need a UI |
+### Conversation State
+MCP clients handle their own (Claude Code does natively). May need Konf-side session tracking for other clients.
+
+### File Watcher (notify)
+Dependency exists, not wired. Auto-reload alternative to manual config:reload.
+
+### Audit Journal for All MCP Calls
+shell:exec logs, others don't. Need universal tool invocation logging.
 
 ---
 
-## How This List Grows
+## Architecture Expansion
 
-Every experiment in `experiments/` will produce findings in `findings/`. Findings that reveal Konf gaps get added here. The roadmap is driven by real friction, not speculation.
+| Item | Why | Build when |
+|------|-----|-----------|
+| SQLite backend | Proves backend-agnostic storage | After experiment 001 |
+| WASM adapter | Proves open adapter architecture | After experiments show which tools people need |
+| Multi-repo orchestration | Managing konf+smrti+unspool as unified system | Experiment 003 |
+| Cross-AI coordination | Claude+Gemini working together | Experiment 002 |
+| The Oracle | Single interface for entire ecosystem | After experiments 001-003 |
+| Network for sandbox | Test HTTP workflows | When architect needs it |
+| Per-session MCP capabilities | Auth + scoped grants | When multi-user |
+| Product packaging | Ship a product (tarball/git/OCI) | When a product is ready to ship |
+| Autonomous mode | Agent without human | Experiment 004 |
+
+---
+
+## Vision Items (build when needed)
+
+| Item | When |
+|------|------|
+| UniFFI mobile bindings | Product needs mobile |
+| P2P agent swarms | Multi-instance needed |
+| Suspend/resume | Long-running workflows |
+| Dynamic capability elevation | "Ask user for permission" flow |
+| Firecracker/gVisor | Untrusted agents |
+| OpenAPI spec | External devs need stable contracts |
+| Admin console | Operators need a UI |
+
+---
+
+## Research Track
+
+Document the process for blog posts, papers, startup pitch:
+- How do AI-steered dev workflows compare to traditional?
+- What patterns emerge when the product IS the development tool?
+- How do multiple AI systems collaborate on a shared codebase?
+- What's the minimum viable Agent OS?
+
+---
+
+## Resources
+
+- Claude Code Max, Gemini CLI Pro, ~$8 OpenCode Zen
+- Time and focus are the real constraints
+- Each experiment: 1-2 sessions max before checkpoint
