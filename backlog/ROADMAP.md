@@ -8,13 +8,14 @@ Driven by experiment findings, not speculation. Each item is something we're bui
 
 Each experiment proves one more layer. Findings feed back into Konf infra.
 
-### Experiment 001: MCP E2E — connect and validate tools
-- [ ] Connect MCP client → konf-mcp → system:introspect → see tools
-- [ ] Generate workflow YAML → yaml:validate_workflow → deploy → execute
-- [ ] shell:exec in sandbox container
-- [ ] config:reload picks up new workflows (now fully implemented)
-- [ ] Git checkpointing via shell:exec
-- [ ] Capability escalation blocked (permission proof)
+### Experiment 001: MCP E2E — COMPLETE (2026-04-08)
+- [x] Connect MCP client → konf-mcp → system_introspect → see tools (12 tools)
+- [x] Generate workflow YAML → yaml_validate_workflow → deploy → execute
+- [x] shell_exec in sandbox container
+- [x] config_reload picks up new workflows (workflow_hello_world registered)
+- [x] Git checkpointing via shell_exec
+- [x] Capability escalation blocked (permission proof)
+- Findings: [001](../findings/001-tool-name-colons.md), [002](../findings/002-mcp-annotations-silent-drop.md), [003](../findings/003-mcp-hot-reload-invisible.md), [004](../findings/004-mcp-infra-level-access.md)
 
 ### Experiment 002: Cross-AI collaboration
 - [ ] Claude Code + Gemini CLI in same workspace
@@ -50,7 +51,13 @@ MCP clients handle their own (Claude Code does natively). May need Konf-side ses
 Dependency exists, not wired. Auto-reload alternative to manual config:reload.
 
 ### Audit Journal for All MCP Calls
-shell:exec logs, others don't. Need universal tool invocation logging.
+shell_exec logs, others don't. Need universal tool invocation logging.
+
+### MCP notifications/tools/list_changed (from Finding 003)
+Hot-registered tools (via config_reload) don't appear in MCP clients without reconnection. konf-mcp needs to send `notifications/tools/list_changed` when the tool registry changes.
+
+### MCP Session Capability Grants (from Finding 004)
+konf-mcp currently gives infra-level access — bare ToolContext with no namespace or capability restriction. Needs auth + session-scoped grants for production multi-tenant MCP access.
 
 ---
 
