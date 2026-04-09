@@ -1,0 +1,26 @@
+workflow: summarize_topic
+description: "Generate a summary of a topic"
+register_as_tool: true
+capabilities: ["*"]
+input_schema:
+  type: object
+  properties:
+    topic:
+      type: string
+  required: [topic]
+nodes:
+  summarize:
+    do: ai_complete
+    with:
+      prompt: "Summarize the following topic in one short sentence: {{input.topic}}"
+    then: log_node
+  log_node:
+    do: echo
+    with:
+      message: "Summary generated"
+    then: return_node
+  return_node:
+    do: echo
+    with:
+      message: "{{summarize.text}}"
+    return: true
