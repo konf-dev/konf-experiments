@@ -3,6 +3,7 @@
 **Experiment:** 001
 **Date:** 2026-04-09
 **Severity:** Medium — causes runtime error with clear message
+**Status:** FIXED (2026-04-09) — `interpolate_env_vars()` pre-processes YAML before parsing, supports `${VAR}` and `${VAR:-default}`
 
 ## What happened
 

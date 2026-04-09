@@ -3,6 +3,7 @@
 **Experiment:** 001
 **Date:** 2026-04-08
 **Severity:** Medium
+**Status:** FIXED (2026-04-09) — `Engine::notify_tools_changed()` + watch channel → `peer.notify_tool_list_changed()` in konf-mcp background task
 
 ## What happened
 
