@@ -1,30 +1,23 @@
 ---
-status: resolved
-resolution: "Colons restored. MCP adapter translates at boundary per SEP-986."
+status: fixed
+resolution: "Colons restored. MCP adapter translates at boundary."
 experiment: "001"
-date: "2026-04-08"
+date: "2026-04-09"
 ---
-# Finding 001: Tool names with colons break MCP client integration
 
-**Experiment:** 001 — The Architect
-**Date:** 2026-04-08
-**Severity:** Blocker — tools don't register at all
-**Issue:** konf-dev/konf#4
+# Finding 001: Tool names with colons break MCP
 
-## What happened
+Tool names use colon-separated namespacing: `shell:exec`, `memory:search`, `ai:complete`. Claude Code maps MCP tool names to internal identifiers as `mcp__server__toolname`. Colons in tool names produce invalid identifiers, so tools silently fail to register.
 
-Connected Claude Code to konf-mcp via `.mcp.json`. The MCP server connects successfully — its instruction text ("Konf AI agent platform...") appears in the system prompt. But zero tools show up in Claude Code's deferred tool list.
+**Status:** RESOLVED
+The kernel uses colons internally. The `konf-mcp` server translates colons to underscores (`_`) in the tool list sent to the MCP client.
 
-## Root cause
+```yaml
+# Internal (workflow)
+do: shell:exec
 
-Tool names use colon-separated namespacing: `shell:exec`, `memory:search`, `ai:complete`. Early MCP clients mapped MCP tool names to internal identifiers as `mcp__server__toolname`. Colons in tool names produced invalid identifiers, so tools silently failed to register.
+# MCP (wire)
+name: shell_exec
+```
 
-While client support has improved, the formal MCP spec (SEP-986) still restricts tool names to `[A-Za-z0-9_\-.]`, making colons non-compliant.
-
-## Fix
-
-The kernel's canonical tool names use colons. An adapter in `konf-mcp` translates them to underscores (`shell_exec`) for MCP clients, ensuring spec compliance at the boundary.
-
-## Lesson
-
-Test MCP integration with actual clients early. The MCP spec allows any string as a tool name, but clients and the formal spec have their own naming constraints. Don't assume spec compliance = client compatibility. The adapter pattern provides a clean separation of concerns.
+This ensures compatibility with the MCP spec and clients while maintaining the kernel's preferred namespacing.

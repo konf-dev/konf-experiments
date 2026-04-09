@@ -23,7 +23,6 @@
 - `platform-business-models.md` — Revenue models, solo founder benchmarks, open-core economics
 - `kell-specification.md` — Formal definition of the kell as composable config boundary
 - `theoretical-positioning.md` — Fields that converge on Konf's design (mechanism design, Ostrom, process algebra)
-- `cross-disciplinary-foundations.md` — The 30+ concepts from experiment 002 organized by field
 
 ## Key Sources (Already in Experiment 002)
 

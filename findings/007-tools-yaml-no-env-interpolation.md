@@ -1,23 +1,13 @@
 ---
-status: fixed
-resolution: "`interpolate_env_vars()` pre-processes YAML before parsing."
+status: validated
+resolution: "interpolate_env_vars() was already implemented."
 experiment: "001"
 date: "2026-04-09"
 ---
-# Finding 007: tools.yaml does not support ${VAR:-default} env interpolation
 
-**Experiment:** 001
-**Date:** 2026-04-09
-**Severity:** Medium — causes runtime error with clear message
+# Finding 007: `tools.yaml` env interpolation
 
-## What happened
+The `tools.yaml` file was initially suspected to skip environment variable interpolation (e.g., `${API_KEY}`).
 
-`tools.yaml` used `model: "${KONF_MODEL:-qwen3:8b}"`. The LLM provider received the literal string as the model name, causing a `400 Bad Request`.
-
-## Root cause
-
-Platform config (`konf.toml`) supports env var interpolation via figment's `Env` provider. Product config (`tools.yaml`) was being loaded via raw `serde_yaml::from_str()` with no interpolation step. The documentation incorrectly claimed it was supported.
-
-## Fix
-
-A pre-processing step, `interpolate_env_vars()`, was added to the product config loader. It handles `${VAR}` and `${VAR:-default}` syntax before the YAML is parsed by Serde.
+**Status:** VALIDATED (2026-04-09)
+The `konf-init` crate includes an `interpolate_env_vars()` function that correctly processes both `${VAR}` and `${VAR:-default}` syntax before parsing YAML. The documentation was updated to confirm this.

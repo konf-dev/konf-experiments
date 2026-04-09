@@ -1,17 +1,25 @@
-| # | Title | Status | Resolution |
-|---|---|---|---|
-| 001 | Tool names with colons break MCP | RESOLVED | Colons restored. MCP adapter translates at boundary per SEP-986. |
-| 002 | MCP annotations cause silent tool drop | FIXED | Annotations not serialized to avoid Claude Code bug. |
-| 003 | Hot-registered tools invisible to MCP | ALREADY WORKED | `notify_tool_list_changed()` was already implemented. |
-| 004 | konf-mcp gives infra-level access | ADDRESSED | `scope_from_role()` + `with_capabilities()`. Dev mode keeps full access. |
-| 005 | YAML uses `with:` not `input:` | DOCUMENTED | Only `with:` exists in parser. Docs updated. |
-| 006 | Template refs need `{{input.x}}` prefix | DOCUMENTED | Workflow input stored under `input` key. Docs updated. |
-| 007 | tools.yaml env interpolation | ALREADY WORKED | `interpolate_env_vars()` was implemented. Docs were wrong. |
-| 008 | Single entry node design | BY DESIGN | First YAML node = entry. Parallel via `then: [a, b]`. |
-| 009 | Nested workflow tools not found | VERIFIED | Was config issue (missing `register_as_tool: true`), not code bug. |
-| 010 | Comprehensive docs gaps | FIXED | `workflow-reference.md` comprehensive rewrite. |
-| 011 | `catch:` schema mismatch | FIXED | `CatchBlock` is now an untagged enum accepting a string or array of branches. |
-| 012 | MCP sessions bypass tool guards | BY DESIGN | Guards at runtime scope, not MCP layer. Matches Linux model (root user bypasses). |
-| 013 | No cancel_schedule mechanism | FIXED | `cancel:schedule` tool added. |
-| 014 | Only one new Rust tool needed for autonomy | VALIDATED | `schedule` tool is the only kernel addition for autonomous agents. |
-| 015 | Event bus (F2) not needed for autonomy | VALIDATED | Push-based scheduling sufficient for proactive agents. |
+# Findings Resolution Matrix
+
+This document tracks the status and resolution of all architectural findings discovered during Konf experiments.
+
+| #   | Title                                  | Status    | Resolution                                                    |
+|-----|----------------------------------------|-----------|---------------------------------------------------------------|
+| 001 | Tool names with colons break MCP       | RESOLVED  | Colons restored. MCP adapter translates at boundary per SEP-986. |
+| 002 | MCP annotations silent drop            | RESOLVED  | Annotations serialized as `annotations` object, not flat keys. |
+| 003 | MCP hot-reload invisible               | VALIDATED | `notify_tool_list_changed()` was already implemented.          |
+| 004 | MCP infra-level access                 | BY-DESIGN | MCP sessions use `capabilities: ["*"]` for operator access.    |
+| 005 | `with:` vs `input:` YAML field         | RESOLVED  | Standardized on `with:` for tool arguments in `parser/schema.rs`.|
+| 006 | Template input prefix                  | RESOLVED  | Workflow input stored under `input` key; use `{{input.x}}`.     |
+| 007 | `tools.yaml` env interpolation         | VALIDATED | `interpolate_env_vars()` is implemented; docs were updated.    |
+| 008 | Single entry node / fan-out            | BY-DESIGN | Use `then: [a, b]` for parallel execution from the entry node. |
+| 009 | Nested workflow tool not found         | VALIDATED | Config issue (missing `register_as_tool: true`), not a bug.    |
+| 010 | Docs gaps from experiment 001          | RESOLVED  | Documentation & Code Coherence Overhaul (2026-04-09).          |
+| 011 | `catch:` schema mismatch               | OPEN      | Parser expects `Vec<CatchBranchSchema>`, docs say string.      |
+| 012 | MCP sessions bypass tool guards        | BY-DESIGN | Guards apply to scoped engines (workflows), not direct MCP.    |
+| 013 | No cancellation for `schedule`         | RESOLVED  | `cancel:schedule` tool implemented (2026-04-09).              |
+| 014 | Only one new Rust tool needed          | VALIDATED | Validates "Product is config" (Principle #9).                  |
+| 015 | Event bus not needed for autonomous    | BY-DESIGN | Push-based (timer → workflow) is sufficient for proactive.     |
+
+---
+
+*Last updated: 2026-04-09*

@@ -82,4 +82,4 @@ Use these tools to validate work against the running system when applicable.
 * **Strategic roadmap:** `konf-experiments/experiments/ROADMAP-2026-04-09.md`
 * **Design principles:** `konf/docs/architecture/design-principles.md` (the constitution of the project)
 * **E2 complete (2026-04-09):** Agent-mode `ai_complete` with capability-enforced ReAct loops. See `konf/docs/plans/master-plan.md` and `konf/docs/architecture/tools.md`.
-* **Experiment 003 complete (2026-04-09):** VCS agent identity (konf-agents[bot]), agentic tool-calling, nested composition, AI-generated workflows validated. Results at `konf-experiments/experiments/003-devkit/RESULTS.md`.
+* **Experiment 003 complete (2026-04-09):** VCS agent identity (konf-agents[bot]), agentic tool-calling, nested composition, AI-generated workflows validated. Results at `konf-experiments/experiments/003-dev-environment/README.md`.
