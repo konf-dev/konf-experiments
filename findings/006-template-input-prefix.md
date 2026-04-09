@@ -1,4 +1,10 @@
-# Finding 006: Template references require `input.` prefix for workflow arguments
+---
+status: documented
+resolution: "Workflow input is stored under the `input` key. Docs updated."
+experiment: "001"
+date: "2026-04-09"
+---
+# Finding 006: Template references require `input.` prefix
 
 **Experiment:** 001
 **Date:** 2026-04-09
@@ -6,13 +12,11 @@
 
 ## What happened
 
-Workflow YAML used `{{url}}` to reference the workflow's input parameter. Got error: `"unresolved reference: url"`.
+A workflow used `{{url}}` to reference one of its own input parameters, which failed with `"unresolved reference: url"`.
 
 ## Root cause
 
-The executor stores workflow input under the key `"input"` in the state map (`executor.rs` line 118: `state.set_output("input", input)`). So to reference a field from the workflow's input, templates must use `{{input.url}}`, not `{{url}}`.
-
-Similarly, to reference output from a previous node named `fetch`, use `{{fetch.body}}`.
+The executor stores the entire workflow input object under the key `"input"` in the state map. To reference a field from the workflow's input, templates must use `{{input.url}}`.
 
 ## Template reference rules
 
@@ -22,10 +26,6 @@ Similarly, to reference output from a previous node named `fetch`, use `{{fetch.
 | `{{fetch.body}}` | Output from node `fetch`, field `body` |
 | `{{fetch}}` | Entire output of node `fetch` |
 
-## Documentation impact
+## Fix
 
-The workflow-reference.md docs show `{{message}}` and `{{search.results}}` as examples. The `{{message}}` form only works if there's a node named `message` — for workflow input, it should be `{{input.message}}`.
-
-## Fix applied
-
-Changed `{{url}}` to `{{input.url}}` in fetch_url workflow. Works correctly now.
+The workflow was changed to use `{{input.url}}`. The documentation (`workflow-reference.md`) was updated to reflect this requirement.

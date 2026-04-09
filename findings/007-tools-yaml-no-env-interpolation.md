@@ -1,26 +1,23 @@
+---
+status: fixed
+resolution: "`interpolate_env_vars()` pre-processes YAML before parsing."
+experiment: "001"
+date: "2026-04-09"
+---
 # Finding 007: tools.yaml does not support ${VAR:-default} env interpolation
 
 **Experiment:** 001
 **Date:** 2026-04-09
 **Severity:** Medium — causes runtime error with clear message
-**Status:** FIXED (2026-04-09) — `interpolate_env_vars()` pre-processes YAML before parsing, supports `${VAR}` and `${VAR:-default}`
 
 ## What happened
 
-`tools.yaml` had `model: "${KONF_MODEL:-qwen3:8b}"`. The LLM provider received the literal string `"${KONF_MODEL:-qwen3:8b}"` as the model name, causing `400 Bad Request: model is required`.
+`tools.yaml` used `model: "${KONF_MODEL:-qwen3:8b}"`. The LLM provider received the literal string as the model name, causing a `400 Bad Request`.
 
 ## Root cause
 
-Platform config (`konf.toml`) supports env var interpolation via figment's `Env` provider. Product config (`tools.yaml`) is loaded via raw `serde_yaml::from_str()` with no interpolation step.
+Platform config (`konf.toml`) supports env var interpolation via figment's `Env` provider. Product config (`tools.yaml`) was being loaded via raw `serde_yaml::from_str()` with no interpolation step. The documentation incorrectly claimed it was supported.
 
-The docs (`docs/admin-guide/security.md`) claim `tools.yaml` supports `${VAR:-default}` interpolation. This is incorrect.
+## Fix
 
-## Fix applied
-
-Hardcoded the model name: `model: "qwen3:8b"`. Works correctly.
-
-## Recommendation
-
-Either:
-1. Implement env var interpolation in tools.yaml loading (pre-process the YAML string before parsing)
-2. Or update docs to clarify that only konf.toml supports env vars, and tools.yaml uses literal values
+A pre-processing step, `interpolate_env_vars()`, was added to the product config loader. It handles `${VAR}` and `${VAR:-default}` syntax before the YAML is parsed by Serde.

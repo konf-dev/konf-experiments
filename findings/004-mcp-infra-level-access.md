@@ -1,3 +1,9 @@
+---
+status: addressed
+resolution: "`scope_from_role()` + `with_capabilities()` implemented. Dev mode keeps full access."
+experiment: "001"
+date: "2026-04-08"
+---
 # Finding 004: konf-mcp gives infra-level access with no namespace
 
 **Experiment:** 001
@@ -6,18 +12,12 @@
 
 ## What happened
 
-Every MCP tool call gets a bare `ToolContext` with:
-- `capabilities: [tool_name]` — only the specific tool being called
-- No namespace
-- No actor identity
-- No session
-
-The HTTP backend (konf-backend) properly creates scoped contexts with `namespace: konf:default:dev_user` and VirtualizedTool wrapping. konf-mcp does not.
+Every MCP tool call was getting a bare `ToolContext` with only the specific tool's capability, and no namespace, actor identity, or session. The HTTP backend (konf-backend) properly creates scoped contexts, but konf-mcp did not.
 
 ## Why this matters
 
-For the architect (trusted, single-user), this is fine. For production multi-tenant MCP access, this means any MCP client has infra-level access to all tools without namespace isolation.
+For the architect agent (trusted, single-user), this is fine. For production multi-tenant MCP access, this means any MCP client has infra-level access to all tools without namespace isolation.
 
-## Fix needed
+## Fix
 
-MCP session capability grants: auth + session-scoped capability grants for MCP connections. Each MCP session should have an associated namespace and capability set, just like HTTP requests do via JWT claims.
+MCP session capability grants were implemented. Authenticated MCP connections (e.g., via SSE with a JWT) now have their capabilities determined by the user's role, just like the HTTP API. `scope_from_role()` and `with_capabilities()` create a properly scoped context for each MCP call. Unauthenticated local stdio sessions still receive broad access for development purposes.

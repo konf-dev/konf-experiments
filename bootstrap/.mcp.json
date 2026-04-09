@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "konf": {
+      "command": "/home/bert/Work/orgs/konf-dev-stack/konf/scripts/start-konf-mcp.sh",
+      "args": [],
+      "env": {
+        "OPENAI_API_KEY": "ollama",
+        "OPENAI_BASE_URL": "http://localhost:11434/v1"
+      }
+    },
+    "gemini": {
+      "command": "gemini-cli-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}

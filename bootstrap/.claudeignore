@@ -1,0 +1,7 @@
+# .claudaignore
+archive/
+target/
+konf/target/
+smrti/target/
+**/.git/
+**/__pycache__/
