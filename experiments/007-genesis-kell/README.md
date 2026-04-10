@@ -1,33 +1,32 @@
 # Experiment 007: `genesis.kell` (Generation 0)
 
-**Status:** Implementation
+**Status:** Implementation (Updated Strategy)
 **Date:** 2026-04-10
-**Goal:** Deploy the "Genesis Kell" as a core product within the Konf ecosystem. This kell acts as the CEO, orchestrating self-evolution and spawning child kells.
+**Goal:** Deploy the "Genesis Kell" as a core product within the Konf ecosystem. This kell acts as the "Second-in-Command" and Sandbox Orchestrator, providing a single, powerful point of contact via MCP.
 
-## Strategy: The Cellular Mono-Repo
+## Strategy: The Second-in-Command Sandbox
 
-Instead of a separate repository, Genesis lives in `konf/products/genesis/`. This ensures the "Kernel" and the "CEO" evolve together while allowing the company state to be deployed as a portable "Cellular Container."
+Instead of a "CEO" or a "Triad," Genesis is a highly capable generic foundational agent. It provides a sandboxed environment executing Konf and offering MCP access.
 
-### 1. The Portable Cell (Docker Compose)
-Genesis is deployed using Docker Compose on a production VPS. This provides:
-- **Immutability:** The VPS is just a host for the Docker engine.
-- **Portability:** Copy the folder, run `docker compose up`, and the company is live.
-- **Isolation:** Genesis's shell access is scoped to the container, not the host root.
+### 1. The Power Set (LiteLLM + Ollama + OpenCode Zen)
+Genesis is powered by a flexible LLM stack:
+- **Local/Free Inference:** Ollama proxied through LiteLLM.
+- **Advanced Reasoning:** OpenCode Zen configured for complex tasks.
+- **Remote Control:** Accessed via remote OpenCode over a secure Tailscale network.
 
-### 2. Networking & Security (Tailscale Membrane)
-- **Tailscale:** The VPS is joined to a private Tailscale network.
-- **Hardened SSH:** The SSH daemon listens ONLY on the Tailscale IP. 
-- **MCP Tunneling:** The founder connects via Gemini CLI over a secure SSH tunnel:
-  `ssh root@genesis-vps "konf-mcp --product genesis"`
+### 2. The Persona (Second-in-Command)
+Genesis is the Founder's right-hand entity. It executes tasks, manages the sandbox, and helps spawn specialized agents with explicit personas only when needed.
 
-### 3. Secret Management (Infisical)
-Genesis uses the local Infisical instance provisioned by the `init` kell. No API keys are ever committed to GitHub; they are injected into the container memory at runtime.
+### 3. The Membrane (Podman + Tailscale + Infisical)
+- **Podman:** Genesis's opinion is to use Podman for rootless, daemonless containerization.
+- **Tailscale:** Zero public attack surface; accessible only via private mesh network.
+- **Infisical:** Secure secret injection without disk exposure.
 
 ---
 
 ## Progress
 
-- [x] **Phase 1: Repository Scaffolding** (Moved to `konf/products/genesis`)
-- [x] **Phase 2: Configuration & Workflows** (Initial CEO DNA written)
+- [x] **Phase 1: Repository Scaffolding** (Integrated in `konf/products/genesis`)
+- [x] **Phase 2: Configuration & Workflows** (Updated to Second-in-Command strategy)
 - [x] **Phase 3: Production Manifest** (Created `docker-compose.yml` in `products/genesis`)
 - [ ] **Phase 4: VPS Deployment** (Provisioning live cell)
