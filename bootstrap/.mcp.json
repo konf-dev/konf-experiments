@@ -1,8 +1,11 @@
 {
   "mcpServers": {
     "konf": {
-      "command": "/home/bert/Work/orgs/konf-dev-stack/konf/scripts/start-konf-mcp.sh",
-      "args": [],
+      "command": "/home/bert/Work/orgs/konf-dev-stack/konf/target/release/konf-mcp",
+      "args": [
+        "--config",
+        "/home/bert/Work/orgs/konf-dev-stack/konf/products/devkit/config"
+      ],
       "env": {
         "OPENAI_API_KEY": "ollama",
         "OPENAI_BASE_URL": "http://localhost:11434/v1"
@@ -12,6 +15,19 @@
       "command": "gemini-cli-mcp",
       "args": [],
       "env": {}
+    },
+    "genesis": {
+      "command": "/home/bert/Work/orgs/konf-dev-stack/konf/target/release/konf-mcp",
+      "args": [
+        "--config",
+        "/home/bert/Work/orgs/konf-dev-stack/konf-genesis/kell/config"
+      ],
+      "env": {
+        "KONF_DEV_MODE": "true",
+        "DATABASE_URL": "postgresql://postgres:konf@localhost:5432/konf",
+        "OPENAI_BASE_URL": "http://localhost:11434/v1",
+        "OPENAI_API_KEY": "ollama"
+      }
     }
   }
 }
