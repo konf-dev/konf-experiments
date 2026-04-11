@@ -20,6 +20,7 @@ This document tracks the status and resolution of all architectural findings dis
 | 014 | Only one new Rust tool needed          | VALIDATED | Validates "Product is config" (Principle #9).                  |
 | 015 | Event bus not needed for autonomous    | BY-DESIGN | Push-based (timer → workflow) is sufficient for proactive.     |
 | 016 | Cell vs Kell Architecture              | DROPPED   | Concept removed 2026-04-11 during docs overhaul. See `konf/docs/MENTAL_MODEL.md`. Only unit is "product". |
+| 017 | Runner is a tool family, not a kernel primitive | RESOLVED  | Shipped `konf-tool-runner` crate with `runner:spawn/status/wait/cancel` + `InlineRunner`. Finding 014 extended: tools, not kernel changes (2026-04-11). |
 
 ---
 
