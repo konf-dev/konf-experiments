@@ -1,10 +1,10 @@
 {
   "mcpServers": {
     "konf": {
-      "command": "/home/bert/Work/orgs/konf-dev-stack/konf/target/release/konf-mcp",
+      "command": "${HOME}/Work/orgs/konf-dev-stack/konf/target/release/konf-mcp",
       "args": [
         "--config",
-        "/home/bert/Work/orgs/konf-dev-stack/konf/products/devkit/config"
+        "${HOME}/Work/orgs/konf-dev-stack/konf/products/devkit/config"
       ],
       "env": {
         "OPENAI_API_KEY": "ollama",
@@ -17,10 +17,10 @@
       "env": {}
     },
     "genesis": {
-      "command": "/home/bert/Work/orgs/konf-dev-stack/konf/target/release/konf-mcp",
+      "command": "${HOME}/Work/orgs/konf-dev-stack/konf/target/release/konf-mcp",
       "args": [
         "--config",
-        "/home/bert/Work/orgs/konf-dev-stack/konf-genesis/kell/config"
+        "${HOME}/Work/orgs/konf-dev-stack/konf-genesis/kell/config"
       ],
       "env": {
         "KONF_DEV_MODE": "true",
