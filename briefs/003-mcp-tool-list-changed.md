@@ -65,7 +65,7 @@ Alternative simpler approach: store the tool registry length/hash before each `l
 
 Read these files first for background:
 
-- `CLAUDE.md` — project philosophy (at the repo root /home/bert/Work/orgs/konf-dev-stack/CLAUDE.md)
+- `bootstrap/CLAUDE.md` — agent instructions (local only, gitignored)
 - `crates/konf-mcp/src/lib.rs` — full file, understand current structure
 - `crates/konf-init/src/lib.rs` — ConfigReloadTool implementation
 - `crates/konflux-core/src/engine.rs` — Engine struct and tool registry
