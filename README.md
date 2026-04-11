@@ -1,34 +1,38 @@
 # Konf Experiments
 
-Testing and validation for the [Konf Agent OS](https://github.com/konf-dev/konf).
+Experiment logs, findings, and roadmap for the [Konf Agent OS](https://github.com/konf-dev/konf).
 
-This repo is where we:
-1. Test the architect agent against real Konf infra
-2. Build products via AI-steered conversation
-3. Document friction points that feed back into Konf's roadmap
-4. Track what needs to be built in the next versions
+## What's here
 
-## Setup
+- **`findings/`** — Empirically discovered friction points from running experiments. Each file has a `status` frontmatter (`RESOLVED`, `VALIDATED`, `BY-DESIGN`, `DROPPED`, or `OPEN`). Status matrix in [`FINDINGS-RESOLUTION.md`](FINDINGS-RESOLUTION.md).
+- **`experiments/`** — Individual experiment logs with results:
+  - `001-architect/` — architect agent builds a product via MCP (proven)
+  - `003-dev-environment/` — VCS agent identity, agentic tool-calling, nested composition (proven)
+  - `004-autonomous/` — autonomous agents via the `schedule` primitive (6/8 criteria passed)
+  - `005-init-system/` — init product design
+  - `007-genesis-kell/` — bootstrap proof for a standalone product. Contains current-state README + friction log + the `vibe-coded-v1/` post-mortem of the previous attempt. **Read `vibe-coded-v1/friction-log.md` before starting any new product work** — the ten drifts it documents are load-bearing lessons.
+- **`briefs/`** — Active work items (the pipeline that turns findings into code changes).
+- **`templates/issue-brief.md`** — template for new briefs.
+- **`bootstrap/.mcp.json`** — configures the `konf` and `genesis` MCP servers for this workspace. `bootstrap/CLAUDE.md` is the agent instruction file (gitignored, local only).
+- **`experiments/ROADMAP-2026-04-09.md`** — strategic roadmap.
+- **`experiments/STATUS-2026-04-09.md`** — current platform status.
+
+## Running experiments
+
+Experiments run against the MCP servers configured in `bootstrap/.mcp.json`:
+
+- **`konf`** — points at `../konf/products/devkit/config` (canonical reference product)
+- **`genesis`** — points at `../konf-genesis/kell/config` (local dev product, requires a running Postgres)
+
+Build konf first:
 
 ```bash
-# 1. Build Konf (in the konf repo)
-cd ../konf-dev-stack/konf
+cd ../konf
 cargo build --release --bin konf-mcp
-
-# 2. Start the sandbox
-docker compose -f sandbox/docker-compose.yml up -d
-
-# 3. Connect your AI client via MCP
-# See experiments/ for specific experiment setups
 ```
 
-## Structure
+Then restart your MCP client (Claude Code, Claude Desktop, Cursor). The `konf` and `genesis` tools will appear in the tool list.
 
-```
-konf-experiments/
-├── backlog/              # What needs building in Konf next
-│   └── ROADMAP.md        # Prioritized list from experiment findings
-├── experiments/          # Individual experiment logs
-│   └── 001-architect/    # First experiment: can the architect build a product?
-└── findings/             # Friction points, bugs, design issues found
-```
+## Single source of truth
+
+See [`../konf/docs/MENTAL_MODEL.md`](../konf/docs/MENTAL_MODEL.md) for konf's architecture, vocabulary, and doctrine. This repo's docs follow it.
