@@ -14,7 +14,7 @@ This document tracks the status and resolution of all architectural findings dis
 | 008 | Single entry node / fan-out            | BY-DESIGN | Use `then: [a, b]` for parallel execution from the entry node. |
 | 009 | Nested workflow tool not found         | VALIDATED | Config issue (missing `register_as_tool: true`), not a bug.    |
 | 010 | Docs gaps from experiment 001          | RESOLVED  | Documentation & Code Coherence Overhaul (2026-04-09).          |
-| 011 | `catch:` schema mismatch               | OPEN      | Parser expects `Vec<CatchBranchSchema>`, docs say string.      |
+| 011 | `catch:` schema mismatch               | RESOLVED  | Both forms (`Simple(String)` and `Branches`) already implemented in `schema.rs:136-149`; test added for the bare-string form (2026-04-11). |
 | 012 | MCP sessions bypass tool guards        | BY-DESIGN | Guards apply to scoped engines (workflows), not direct MCP.    |
 | 013 | No cancellation for `schedule`         | RESOLVED  | `cancel:schedule` tool implemented (2026-04-09).              |
 | 014 | Only one new Rust tool needed          | VALIDATED | Validates "Product is config" (Principle #9).                  |
@@ -23,4 +23,4 @@ This document tracks the status and resolution of all architectural findings dis
 
 ---
 
-*Last updated: 2026-04-11*
+*Last updated: 2026-04-11 (finding 011 resolved).*
