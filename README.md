@@ -14,7 +14,6 @@ Experiment logs, findings, and roadmap for the [Konf Agent OS](https://github.co
 - **`briefs/`** — Active work items (the pipeline that turns findings into code changes).
 - **`templates/issue-brief.md`** — template for new briefs.
 - **`bootstrap/.mcp.json`** — configures the `konf` and `genesis` MCP servers for this workspace. `bootstrap/CLAUDE.md` is the agent instruction file (gitignored, local only).
-- **`experiments/ROADMAP-2026-04-09.md`** — strategic roadmap.
 - **`experiments/STATUS-2026-04-09.md`** — current platform status.
 
 ## Running experiments
