@@ -19,8 +19,8 @@ This document tracks the status and resolution of all architectural findings dis
 | 013 | No cancellation for `schedule`         | RESOLVED  | `cancel:schedule` tool implemented (2026-04-09).              |
 | 014 | Only one new Rust tool needed          | VALIDATED | Validates "Product is config" (Principle #9).                  |
 | 015 | Event bus not needed for autonomous    | BY-DESIGN | Push-based (timer → workflow) is sufficient for proactive.     |
-| 016 | Cell vs Kell Architecture              | RESOLVED  | Independent repositories for living state (The Operator).      |
+| 016 | Cell vs Kell Architecture              | DROPPED   | Concept removed 2026-04-11 during docs overhaul. See `konf/docs/MENTAL_MODEL.md`. Only unit is "product". |
 
 ---
 
-*Last updated: 2026-04-10*
+*Last updated: 2026-04-11*
